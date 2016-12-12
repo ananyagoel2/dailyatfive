@@ -1,6 +1,8 @@
 /**
  * Created by ananyagoel on 27/11/16.
  */
+var mongoose= require('mongoose');
+mongoose.Promise = global.Promise;
 
 var mongoose_dev= require('./database_dev');
 var mongoose_staging = require('./database_staging');
@@ -11,7 +13,8 @@ var developmentConfig = {
         upload_file_path: '/Users/ananyagoel/Desktop/dailyatfive/uploads/',
         static_path: '/Users/ananyagoel/Desktop/dailyatfive/uploads/',
         base_url: 'http://localhost:3000',
-        MONGO_CONFIG: mongoose_dev,
+        options: mongoose_dev,
+        url : "mongodb://localhost:27017/dev_db",
         CONFIG_ENV: 'development',
         PORT: '3000'
     },
@@ -21,7 +24,8 @@ var developmentConfig = {
         upload_file_path: '/home/daily/uploads/photos/',
         static_path: '/home/daily/uploads/',
         base_url: 'https://dev.dailyatfive.in',
-        MONGO_CONFIG: mongoose_staging,
+        options: mongoose_staging,
+        url : "mongodb://localhost:27017/staging_db",
         CONFIG_ENV: 'staging',
         PORT: '3001'
     },
@@ -30,7 +34,8 @@ var developmentConfig = {
         upload_file_path: '/home/dexter/uploads/photos/new/',
         static_path: '/home/dexter/uploads/',
         base_url: 'https://master.dextra.xyz',
-        KNEX_CONFIG: mongoose_production,
+        options: mongoose_production,
+        url : "mongodb://localhost:27017/production_db",
         CONFIG_ENV: 'production',
         PORT: '3002'
     };
@@ -41,6 +46,12 @@ var config = developmentConfig;
 //var config = prodConfig;
 
 config.https_link = config.base_url + '/uploads/photos/';
+mongoose.connect(config.url, config.options)
+    .then(function () {
+        console.log("connected to "+config.CONFIG_ENV);
+    }).catch(function (err) {
+    console.log(err)
+})
 
 config.min_version_code = "1";
 config.current_version_code = "0";
