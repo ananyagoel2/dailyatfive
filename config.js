@@ -4,9 +4,9 @@
 var mongoose= require('mongoose');
 mongoose.Promise = global.Promise;
 
-var mongoose_dev= require('./database_dev');
-var mongoose_staging = require('./database_staging');
-var mongoose_production = require('./database_production')
+var mongoose_dev= require('./database_config/database_dev');
+var mongoose_staging = require('./database_config/database_staging');
+var mongoose_production = require('./database_config/database_production')
 //var crypto = require('crypto');
 
 var developmentConfig = {

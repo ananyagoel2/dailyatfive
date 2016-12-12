@@ -20,9 +20,12 @@ router.post('/', function(req, res, next) {
 
 // save the user
     newUser.save(function(err) {
-        if (err) res.send(err);
-
-        res.send('User created!');
+        if (err){
+            res.status('400').send(err);
+        }
+        else {
+            res.send('User created!');
+        }
     });
 
 });
