@@ -61,23 +61,32 @@ var user_schema = new schema({
         type: String,
         trim:true
     },
+    fcm_toke :
+    {
+        type:String,
+    },
     facebook:{
-        fbid:
+        id:
         {
             type:String,
-            trim:true
+            trim:true,
+            unique:true
         },
         token:
         {
             type:String
         },
-        displayName :{
+        display_name :{
             type:String
         },
         email : {
             type:String
         },
         profile_url :
+        {
+            type:String
+        },
+        access_token:
         {
             type:String
         }

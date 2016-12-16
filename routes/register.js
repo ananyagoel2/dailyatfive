@@ -4,6 +4,12 @@
 var express = require('express');
 var router = express.Router();
 var user = require('../models/model_user');
+// var local_strategy    = require('passport-local').Strategy;
+var facebook_strategy = require('passport-facebook').Strategy;
+var config_auth = require('../config/login_auth');
+// var FacebookTokenStrategy = require('passport-facebook-token');
+var passport = require('passport');
+
 
 /* GET users listing. */
 router.post('/', function(req, res, next) {
@@ -29,5 +35,17 @@ router.post('/', function(req, res, next) {
     });
 
 });
+
+// router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+router.post('/auth/facebook/token', passport.authenticate('facebook-token'),function (req, res) {
+    console.log("here2")
+    res.send(req.user? 200 : 401)
+});
+
+router.get('/auth/facebook/callback', passport.authenticate('facebook', {
+    successRedirect: '/profile',
+    failureRedirect: '/',
+}));
+
 
 module.exports = router;
