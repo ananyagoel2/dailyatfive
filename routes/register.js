@@ -7,7 +7,7 @@ var user = require('../models/model_user');
 // var local_strategy    = require('passport-local').Strategy;
 var facebook_strategy = require('passport-facebook').Strategy;
 var config_auth = require('../config/login_auth');
-// var FacebookTokenStrategy = require('passport-facebook-token');
+var FacebookTokenStrategy = require('passport-facebook-token');
 var passport = require('passport');
 
 
@@ -36,16 +36,19 @@ router.post('/', function(req, res, next) {
 
 });
 
-// router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
-router.post('/auth/facebook/token', passport.authenticate('facebook-token'),function (req, res) {
+router.get('/auth/facebook', passport.authenticate('facebook', { scope : ['user_friends','email'] }));
+router.get('/auth/facebook/token', passport.authenticate('facebook-token',{session:false}),function (req, res) {
     console.log("here2")
     res.send(req.user? 200 : 401)
 });
 
 router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: '/profile',
+    successRedirect: '/register/profile',
     failureRedirect: '/',
 }));
+router.get('/profile', function(req, res, next) {
+    res.send('respond with a resource');
+});
 
 
 module.exports = router;
