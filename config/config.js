@@ -16,7 +16,7 @@ var developmentConfig = {
         options: mongoose_dev,
         url : "mongodb://localhost:27017/dev_db",
         CONFIG_ENV: 'development',
-        PORT: '3001'
+        PORT: '3000'
     },
 
 

@@ -36,19 +36,24 @@ router.post('/', function(req, res, next) {
 
 });
 
-router.get('/auth/facebook', passport.authenticate('facebook', { scope : ['user_friends','email'] }));
-router.get('/auth/facebook/token', passport.authenticate('facebook-token',{session:false}),function (req, res) {
-    console.log("here2")
-    res.send(req.user? 200 : 401)
-});
+router.get('/auth/facebook', passport.authenticate('facebook'));
 
-router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: '/register/profile',
-    failureRedirect: '/',
-}));
-router.get('/profile', function(req, res, next) {
-    res.send('respond with a resource');
-});
+router.get(
+    '/auth/facebook/token',
+    passport.authenticate('bearer', { session: false }),
+    function(req, res) {
+        res.send(req.user.toJSON());
+    }
+);
+
+
+router.get('/auth/facebook/callback',
+    passport.authenticate('facebook', { session: false, failureRedirect: "/" }),
+    function(req, res) {
+        res.redirect("/register/auth/facebook/token?access_token=" + req.user.facebook.token);
+    }
+);
+
 
 
 module.exports = router;

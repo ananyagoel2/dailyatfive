@@ -10,14 +10,7 @@ var bcrypt = require('bcrypt');
 var SALT_WORK_FACTOR = 10;
 
 var user_schema = new schema({
-    email :
-    {
-        type:String,
-        required:true,
-        unique:true,
-        trim:true,
-        index: true
-    },
+
     created_at:
     {
         type: Date
@@ -56,16 +49,22 @@ var user_schema = new schema({
     {
         type:String,
     },
+    id:{
+        type:String,
+        unique:true
+    },
     facebook:{
         id:
         {
             type:String,
             trim:true,
-            unique:true
+            unique:true,
+            required:true
         },
         token:
         {
-            type:String
+            type:String,
+            required:true
         },
         display_name :{
             type:String
@@ -77,10 +76,11 @@ var user_schema = new schema({
         {
             type:String
         },
-        access_token:
-        {
-            type:String
-        }
+        gender:
+            {
+                type:String
+            },
+
 
     },
     mobile_verified:

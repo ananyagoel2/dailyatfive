@@ -1,83 +1,125 @@
-/**
- * Created by ananyagoel on 16/12/16.
- */
-
-// config/passport.js
-
-// load all the things we need
-// var LocalStrategy    = require('passport-local').Strategy;
-var facebook_strategy = require('passport-facebook').Strategy;
-var facebook_token_strategy = require('passport-facebook-token');
-// load up the user model
-var user  = require('../models/model_user');
-
-// load the auth variables
+var FacebookStrategy = require('passport-facebook').Strategy;
+// var TwitterStrategy = require('passport-twitter').Strategy;
+// var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var User_m = require('../models/model_user');
 var config_auth = require('./login_auth');
+var bearer_strategy = require('passport-http-bearer').Strategy
 
 module.exports = function(passport) {
 
-    // code for login (use('local-login', new LocalStategy))
-    // code for signup (use('local-signup', new LocalStategy))
 
-    // =========================================================================
-    // FACEBOOK ================================================================
-    // =========================================================================
-    passport.use(new facebook_strategy({
-
-            // pull in our app id and secret from our auth.js file
-            clientID        : config_auth.facebook_auth.client_ID,
-            clientSecret    : config_auth.facebook_auth.client_secret,
-            callbackURL     : config_auth.facebook_auth.callback_URL,
+    passport.use(new FacebookStrategy({
+            clientID: config_auth.facebook_auth.client_ID,
+            clientSecret: config_auth.facebook_auth.client_secret,
+            callbackURL: config_auth.facebook_auth.callback_URL,
+            profileFields: config_auth.facebook_auth.profileFields,
         },
-
-        // facebook will send back the token and profile
         function(token, refreshToken, profile, done) {
-
-            // asynchronous
             process.nextTick(function() {
-                console.log("here")
-                // find the user in the database based on their facebook id
-                user.findOne({ 'facebook.id' : profile.id }, function(err, User) {
-
-                    // if there is an error, stop everything and return that
-                    // ie an error connecting to the database
+                User_m.findOne({ 'facebook.id': profile.id }, function(err, user) {
                     if (err)
                         return done(err);
-
-                    // if the user is found, then log them in
                     if (user) {
-                        return done(null, User); // user found, return that user
+                        return done(null, user);
                     } else {
-                        // if there is no user found with that facebook id, create them
+                        var newUser = new User_m();
+                        newUser.facebook.id = profile.id;
+                        newUser.facebook.token = token;
+                        newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
+                        newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
+                        newUser.id = profile.id;
+                        newUser.first_name= profile.name.givenName;
+                        newUser.last_name = profile.name.familyName;
+                        newUser.facebook.gender = profile.gender;
 
-                        var new_user = new user();
-
-                        // set all of the facebook information in our user model
-                        new_user.facebook.id    = profile.id; // set the users facebook id
-                        new_user.facebook.token = token; // we will save the token that facebook provides to the user
-                        new_user.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                        new_user.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-                        new_user.email = profile.emails[0].value;
-                        new_user.first_name = profile.name.givenName;
-                        new_user.last_name = profile.name.familyName;
-                        // save our user to the database
-                        console.log("new user /n"+new_user)
-                        new_user.save(function(err) {
-                            if (err){
-                                console.log(err)
+                        newUser.save(function(err) {
+                            if (err)
+                            {
                                 throw err;
-                            }
 
-                            else{
-                                return done(null, new_user);
                             }
-                            // if successful, return the new user
+                            else{
+                                return done(null, newUser);
+                            }
                         });
                     }
-
                 });
             });
-
         }));
+    passport.use(
+        new bearer_strategy(
+            function(token, done) {
+                User_m.findOne({ 'facebook.token': token },
+                    function(err, user) {
+                        if(err) {
+                            return done(err)
+                        }
+                        if(!user) {
+                            return done(null, false)
+                        }
+
+                        return done(null, user, { scope: 'all' })
+                    }
+                );
+            }
+        )
+    );
+    // passport.use(new TwitterStrategy({
+    //         consumerKey: configAuth.twitterAuth.consumerKey,
+    //         consumerSecret: configAuth.twitterAuth.consumerSecret,
+    //         callbackURL: configAuth.twitterAuth.callbackURL,
+    //     },
+    //     function(token, tokenSecret, profile, done) {
+    //         process.nextTick(function() {
+    //             User_m.findOne({ 'twitter.id': profile.id }, function(err, user) {
+    //                 if (err)
+    //                     return done(err);
+    //                 if (user) {
+    //                     return done(null, user);
+    //                 } else {
+    //                     var newUser = new User_m();
+    //                     console.log(profile)
+    //                     newUser.twitter.id          = profile.id;
+    //                     newUser.twitter.token       = token;
+    //                     newUser.twitter.username    = profile.username;
+    //                     newUser.twitter.displayName = profile.displayName;
+    //                     newUser.save(function(err) {
+    //                         if (err)
+    //                             throw err;
+    //                         return done(null, newUser);
+    //                     });
+    //                 }
+    //             });
+    //         });
+    //     }));
+    //
+    // passport.use(new GoogleStrategy({
+    //         clientID: configAuth.googleAuth.clientID,
+    //         clientSecret: configAuth.googleAuth.clientSecret,
+    //         callbackURL: configAuth.googleAuth.callbackURL,
+    //     },
+    //     function(token, refreshToken, profile, done) {
+    //         process.nextTick(function() {
+    //             User_m.findOne({ 'google.id': profile.id }, function(err, user) {
+    //                 if (err)
+    //                     return done(err);
+    //                 if (user) {
+    //                     return done(null, user);
+    //                 } else {
+    //                     var newUser = new User_m();
+    //                     console.log(profile)
+    //                     newUser.google.id = profile.id;
+    //                     newUser.google.token = token;
+    //                     newUser.google.name = profile.displayName;
+    //                     newUser.google.email = profile.emails[0].value;
+    //                     newUser.save(function(err) {
+    //                         if (err)
+    //                             throw err;
+    //                         return done(null, newUser);
+    //                     });
+    //                 }
+    //             });
+    //         });
+    //     }));
 
 };

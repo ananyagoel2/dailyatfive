@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config/config');
 var passport = require('passport');
-
+var session = require('express-session')
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -14,6 +14,7 @@ var register = require('./routes/register');
 
 
 var app = express();
+require('./config/passport')(passport);
 
 
 // view engine setup
@@ -28,8 +29,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
-
-require('./config/passport')(passport);
+app.use(passport.session());
+app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
 
 app.use('/', index);
 app.use('/users', users);
