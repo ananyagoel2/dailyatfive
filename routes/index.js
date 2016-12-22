@@ -7,9 +7,6 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
-router.get('/auth/facebook/callback', passport.authenticate('facebook', {
-    successRedirect: '/register/profile',
-    failureRedirect: '/',
-}));
+
 
 module.exports = router;

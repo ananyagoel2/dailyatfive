@@ -15,28 +15,32 @@ var passport = require('passport');
 router.post('/', function(req, res, next) {
     // res.send('respond with a resource');
     var newUser = user({
-        first_name: 'Ananya',
-        last_name: 'Goel',
-        email:'goelananya2@gmail.com',
-        mobile_number:"9999953547",
-        extension:"+91",
-        password: 'password',
-        admin: true
+        first_name: req.body.first_name,
+        last_name: req.body.last_name,
+        email:req.body.email,
+        mobile_number:req.body.mobile_number,
+        extension:req.body.extension,
+        admin: req.body.admin,
+        'facebook.id': req.body.facebook_id,
+        facebook_id:req.body.facebook_id,
+        'facebook.token' : req.body.token,
+        'facebook.gender': req.body.gender,
+        'facebook.email' : req.body.email,
     });
 
-// save the user
     newUser.save(function(err) {
         if (err){
             res.status('400').send(err);
         }
         else {
-            res.send('User created!');
+            console.log(newUser._id)
+            res.redirect("/users/"+newUser._id);
         }
     });
 
 });
 
-router.get('/auth/facebook', passport.authenticate('facebook'));
+router.get('/auth/facebook', passport.authenticate('facebook',{scope:['email','phone_number']}));
 
 router.get(
     '/auth/facebook/token',

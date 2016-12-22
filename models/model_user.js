@@ -33,6 +33,7 @@ var user_schema = new schema({
     {
         type:String,
         trim:true,
+        default:"+91"
     },
     first_name :
     {
@@ -49,9 +50,11 @@ var user_schema = new schema({
     {
         type:String,
     },
-    id:{
+    facebook_id:
+    {
         type:String,
-        unique:true
+        unique:true,
+        required:true
     },
     facebook:{
         id:
@@ -92,7 +95,13 @@ var user_schema = new schema({
     {
         type:Boolean,
         default:false
-    }
+    },
+    email:
+        {
+            type:String,
+            trim:true,
+            unique:true
+        }
 });
 
 

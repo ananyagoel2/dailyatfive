@@ -16,18 +16,19 @@ module.exports = function(passport) {
         },
         function(token, refreshToken, profile, done) {
             process.nextTick(function() {
-                User_m.findOne({ 'facebook.id': profile.id }, function(err, user) {
+                User_m.findOne({ 'facebook.facebook_id': profile.id }, function(err, user) {
                     if (err)
                         return done(err);
                     if (user) {
                         return done(null, user);
                     } else {
+                        console.log(profile)
                         var newUser = new User_m();
                         newUser.facebook.id = profile.id;
                         newUser.facebook.token = token;
                         newUser.facebook.name = profile.name.givenName + ' ' + profile.name.familyName;
                         newUser.facebook.email = (profile.emails[0].value || '').toLowerCase();
-                        newUser.id = profile.id;
+                        newUser.facebook_id = profile.id;
                         newUser.first_name= profile.name.givenName;
                         newUser.last_name = profile.name.familyName;
                         newUser.facebook.gender = profile.gender;
