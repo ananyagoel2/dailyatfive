@@ -1,0 +1,14 @@
+{
+  "apps" : [{
+    "name"        : "dafive-test-server",
+    "script"      : "/home/ubuntu/app/dailyatfive/bin/www",
+    "cwd"         : "/home/ubuntu/app/dailyatfive",
+    "watch"       : true,
+    "env": {
+      "NODE_ENV": "test"
+    },
+    "env_production" : {
+      "NODE_ENV": "testpm inst"
+    }
+  }]
+}

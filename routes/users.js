@@ -33,11 +33,9 @@ router.route('/:user_id')
                 user_update_object[key] = req.body[key];
             }
         }
-    user_m.findById(req.params.user_id,function (err,user) {
-
-
-        user.save(function (err) {
-            if(err){
+        console.log(user_update_object)
+        user_m.findByIdandUpdate(req.params.user_id,user_update_object,function (err,user) {
+        if(err){
                 res.status(400).send(err)
             }
             else
@@ -45,7 +43,6 @@ router.route('/:user_id')
                 //USED 303 to redirect to get of the route! it works fine af
                 res.redirect(303,"/users/"+user._id);
             }
-        })
     })
     });
 
