@@ -4,6 +4,7 @@
     "script"      : "/home/ubuntu/app/dailyatfive/bin/www",
     "cwd"         : "/home/ubuntu/app/dailyatfive",
     "watch"       : true,
+    "instances" : "max",
     "env": {
       "NODE_ENV": "test"
     },
