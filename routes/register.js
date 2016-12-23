@@ -6,34 +6,65 @@ var router = express.Router();
 var user = require('../models/model_user');
 var passport = require('passport');
 var jwt= require('../utilities/jwt_utility');
-
+var facebook_data = require('../models/model_facebook');
 /* GET users listing. */
 router.post('/', function(req, res, next) {
     // res.send('respond with a resource');
-    var newUser = user({
+    var new_user = user({
         first_name: req.body.first_name,
         last_name: req.body.last_name,
         email:req.body.email,
         mobile_number:req.body.mobile_number,
         extension:req.body.extension,
         admin: req.body.admin,
-        'facebook.id': req.body.facebook_id,
         facebook_id:req.body.facebook_id,
-        'facebook.token' : req.body.token,
-        'facebook.gender': req.body.gender,
-        'facebook.email' : req.body.email,
-        'facebook.display_name': req.body.first_name+' '+req.body.last_name,
-        'facebook.user_likes': req.body.user_likes,
-        'facebook.user_friends_count': req.body.user_friends_count
+        fcm_token: req.body.fcm_token,
+        gender: req.body.gender,
+        description: req.body.description,
+        birthday: req.body.birthday,
+        'facebook.id': req.body.facebook_id,
+        'facebook.token': req.body.access_token,
     });
 
-    newUser.save(function(err) {
+    new_user.save(function(err) {
         if (err){
             res.status('400').send(err);
         }
         else {
-            console.log(newUser._id)
-            res.redirect("/users/"+newUser._id);
+            console.log(new_user._id)
+            var new_facebook = facebook_data({
+                user:new_user._id,
+                user_friends: req.body.user_friends,
+                user_likes: req.body.user_likes,
+                work: req.body.work,
+                facebook_id: req.body.facebook_id,
+                education : req.body.education
+            });
+            new_facebook.save(function (err) {
+                if (err){
+                    res.status('400').send(err)
+                }
+                else
+                {
+                    user.findById(new_user._id,function (err, user_o) {
+                        if(err){
+                            res.status('400').send(err)
+                        }
+                        else{
+                                user_o.facebook.facebook_data =new_facebook._id;
+                                user_o.save(function (err) {
+                                    if(err){
+                                        res.status('400').send(err);
+                                    }
+                                    else{
+                                        res.redirect("/users/"+user_o._id);
+                                    }
+                                })
+                        }
+                    })
+
+                }
+            })
         }
     });
 
