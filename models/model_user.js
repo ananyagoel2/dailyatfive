@@ -74,7 +74,8 @@ var user_schema = new schema({
         },
         email : {
             type:String,
-            required:true
+            required:true,
+            unique:true
         },
         user_friends_count :
         {
