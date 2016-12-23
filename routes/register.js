@@ -22,6 +22,9 @@ router.post('/', function(req, res, next) {
         'facebook.token' : req.body.token,
         'facebook.gender': req.body.gender,
         'facebook.email' : req.body.email,
+        'facebook.display_name': req.body.first_name+' '+req.body.last_name,
+        'facebook.user_likes': req.body.user_likes,
+        'facebook.user_friends_count': req.body.user_friends_count
     });
 
     newUser.save(function(err) {
