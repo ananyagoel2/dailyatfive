@@ -73,9 +73,10 @@ var user_schema = new schema({
             type:String
         },
         email : {
-            type:String
+            type:String,
+            required:true
         },
-        profile_url :
+        user_friends_count :
         {
             type:String
         },
@@ -83,7 +84,11 @@ var user_schema = new schema({
             {
                 type:String
             },
+        user_likes:
+            {
+                type:schema.Types.Mixed
 
+            }
 
     },
     mobile_verified:
@@ -100,7 +105,8 @@ var user_schema = new schema({
         {
             type:String,
             trim:true,
-            unique:true
+            unique:true,
+            required:true
         }
 });
 

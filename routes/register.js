@@ -4,12 +4,8 @@
 var express = require('express');
 var router = express.Router();
 var user = require('../models/model_user');
-// var local_strategy    = require('passport-local').Strategy;
-var facebook_strategy = require('passport-facebook').Strategy;
-var config_auth = require('../config/login_auth');
-var FacebookTokenStrategy = require('passport-facebook-token');
 var passport = require('passport');
-
+var jwt= require('../utilities/jwt_utility');
 
 /* GET users listing. */
 router.post('/', function(req, res, next) {
@@ -42,11 +38,13 @@ router.post('/', function(req, res, next) {
 
 router.get('/auth/facebook', passport.authenticate('facebook',{scope:['email','phone_number']}));
 
-router.get(
-    '/auth/facebook/token',
+router.get('/auth/facebook/token',
     passport.authenticate('bearer', { session: false }),
     function(req, res) {
-        res.send(req.user.toJSON());
+        var response = {}
+        response.user=req.user.toJSON();
+        response.access_token = jwt.createToken(jwt.generatePayload(user))
+        res.send(response);
     }
 );
 

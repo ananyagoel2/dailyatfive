@@ -57,26 +57,9 @@ config.min_version_code = "1";
 config.current_version_code = "0";
 
 
-//config.aes = {};
-//config.aes.iv = 'vZIZU4wJS3zx1pK0';
-//config.aes.key = '7219aa67d6a12836a9f6bed1a5e25eaa';
-//config.aes.keyword = 'randomotpkeyyekptomodnar';
+config.JWT_secret_key = "xmbJLiOzQWqsYoHhMaf7";
+config.JWT_expiration_delta = "100d"; // 100 days
 
-// config.smtpConfig = {
-//     host: 'smtp.zoho.com',
-//     port: 587,
-//     requireTLS: true,
-//     //secure: true,
-//     auth: {
-//         user: 'hi@dextra.xyz',
-//         pass: 'zohodextra422'
-//     }
-// };
-//
-// config.JWT_SECRET_KEY = "xmbJLiOzQWqsYoHhMaf7";
-// config.JWT_EXPIRATION_DELTA = "100d"; // 100 days
-// config.BCRYPT_LOG_ROUNDS = 7; // 7 rounds
-// config.ADMIN_IDS = [357, 385];
-// config.SAFEWORD = "PQ19YKMdZC9392daLLh6";
+
 
 module.exports = config;
