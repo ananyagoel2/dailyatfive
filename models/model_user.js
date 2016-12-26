@@ -61,7 +61,6 @@ var user_schema = new schema({
         id:
             {
             type: String,
-            trim: true,
             unique: true,
             required: true
             },
