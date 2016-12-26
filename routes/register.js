@@ -57,7 +57,7 @@ router.post('/', function(req, res, next) {
                                         res.status('400').send(err);
                                     }
                                     else{
-                                        res.redirect("/users/"+user_o._id);
+                                        res.redirect("/users/"+user_o._id+"/facebook");
                                     }
                                 })
                         }

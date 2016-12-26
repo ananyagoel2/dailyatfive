@@ -47,4 +47,19 @@ router.route('/:user_id')
     });
 
 
+router.route('/:user_id/facebook')
+    .get(function (req, res) {
+        user_m.findById(req.params.user_id)
+            .populate('facebook.facebook_data')
+            .exec(function (err, user) {
+                if(err){
+                    res.status(400).send(err)
+                }
+                else
+                {
+                    res.status(200).send(user)
+                }
+            })
+    })
+
 module.exports = router;

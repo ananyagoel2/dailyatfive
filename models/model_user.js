@@ -3,7 +3,6 @@
  */
 
 
-//TODO: finalise fb login + indexing enabling
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 var facebook_data =require('./model_facebook');
@@ -74,7 +73,7 @@ var user_schema = new schema({
         facebook_data:
             {
                 type: schema.ObjectId,
-                ref: facebook_data
+                ref: 'facebook_data'
             },
     },
     mobile_verified:
