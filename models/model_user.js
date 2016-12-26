@@ -25,7 +25,8 @@ var user_schema = new schema({
         {
         type:String,
         trim:true,
-        unique:true},
+        unique:true,
+        index:true},
     extension :
         {
         type:String,
@@ -51,7 +52,8 @@ var user_schema = new schema({
         {
         type:String,
         unique:true,
-        required:true
+        required:true,
+        index:true
         },
     gender:
         {
@@ -62,7 +64,8 @@ var user_schema = new schema({
             {
             type: String,
             unique: true,
-            required: true
+            required: true,
+            index:true
             },
         token:
             {
@@ -133,7 +136,9 @@ user_schema.pre('save', function(next) {
 
 
 user_schema.index({ email: 1, type: -1 }); // schema level
-user_schema.index({mobile_number:1,type:-1})
+user_schema.index({mobile_number:1,type:-1});
+
+
 
 var user = mongoose.model('user', user_schema);
 
