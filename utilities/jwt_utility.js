@@ -9,7 +9,6 @@ var jwt      = Promise.promisifyAll(require('jsonwebtoken'));
 
 
 var createToken = function (payload) {
-    console.log("Creating token");
     return jwt.signAsync(payload, config.JWT_secret_key, {
         algorithm: 'HS256',
         expiresIn: config.JWT_expiration_delta,

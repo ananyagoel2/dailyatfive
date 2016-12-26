@@ -4,11 +4,15 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var config = require('./config/config');
 var passport = require('passport');
 var session = require('express-session');
 var jwt = require('express-jwt');
 var _ = require('lodash');
+
+var config = require('./config/config');
+require('./config/passport')(passport);
+
+
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -16,7 +20,6 @@ var register = require('./routes/register');
 
 
 var app = express();
-require('./config/passport')(passport);
 
 
 //JWT setup
@@ -54,6 +57,19 @@ app.use(function(req, res, next) {
   err.status = 404;
   next(err);
 });
+
+app.use(function (err, req, res, next) {
+    if (err.name === 'UnauthorizedError') {
+        // var error ={}
+        // error.name= err.name;
+        // error.code = err.code;
+        // error.reason = err.message;
+        // error.message = "Your session has expired. /nLogin to continue";
+        // throw makeError("Invalid Authorization Token", err, 401);
+    }
+    res.status(401).send(err)
+});
+
 
 // error handler
 app.use(function(err, req, res, next) {
