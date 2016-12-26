@@ -29,7 +29,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token']}));
+app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token',]}));
 
 
 // view engine setup

@@ -58,7 +58,7 @@ router.post('/', function(req, res, next) {
                                         res.status('400').send(err);
                                     }
                                     else{
-                                        res.redirect("/users/"+user_o._id+"/facebook");
+                                        res.redirect("/register/auth/facebook/token"+req.body.access_token);
                                     }
                                 })
                         }
