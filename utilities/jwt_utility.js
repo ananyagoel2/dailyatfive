@@ -18,7 +18,6 @@ var createToken = function (payload) {
 };
 
 var generatePayload = function (user) {
-    console.log("Generate Payload");
     return {
         user_id: user._id,
         admin: user.admin
@@ -26,13 +25,10 @@ var generatePayload = function (user) {
 };
 
 var verifyToken = function (token) {
-    console.log("Verify token");
-    console.log(token);
     return jwt.verify(token, config.JWT_secret_key);
 };
 
 var decodeToken = function(token){
-    console.log('decoding token.');
     return jwt.decode(token);
 };
 

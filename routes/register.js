@@ -7,6 +7,7 @@ var user = require('../models/model_user');
 var passport = require('passport');
 var jwt= require('../utilities/jwt_utility');
 var facebook_data = require('../models/model_facebook');
+var Promise = require('bluebird');
 /* GET users listing. */
 router.post('/', function(req, res, next) {
     // res.send('respond with a resource');
@@ -76,9 +77,13 @@ router.get('/auth/facebook/token',
     passport.authenticate('bearer', { session: false }),
     function(req, res) {
         var response = {}
-        response.user=req.user.toJSON();
-        response.access_token = jwt.createToken(jwt.generatePayload(user))
-        res.send(response);
+        return Promise.props({
+        user:req.user.toJSON(),
+        access_token:jwt.createToken(jwt.generatePayload(user))
+        }).then(function (response) {
+            res.status(200).send(response);
+        })
+
     }
 );
 

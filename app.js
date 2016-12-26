@@ -6,7 +6,9 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var config = require('./config/config');
 var passport = require('passport');
-var session = require('express-session')
+var session = require('express-session');
+var jwt = require('express-jwt');
+var _ = require('lodash');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -15,6 +17,16 @@ var register = require('./routes/register');
 
 var app = express();
 require('./config/passport')(passport);
+
+
+//JWT setup
+app.use(function (req, res, next) {
+    var auth_token = req.headers.authorization;
+    req.headers.authorization = _.replace(auth_token, 'JWT', 'Bearer');
+    next();
+});
+
+app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token']}));
 
 
 // view engine setup
