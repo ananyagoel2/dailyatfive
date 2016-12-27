@@ -64,9 +64,30 @@ router.post('/', function(req, res, next) {
                         }
                         else
                         {
-                            res.redirect("/register/auth/response?user_id="+user_f._id+"&safeword="+config.safeword);
-                            facebook_extending_token(user_f);
-                            // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
+                            var new_facebook = {
+                                user:user_f._id,
+                                user_friends: req.body.user_friends,
+                                user_likes: req.body.user_likes,
+                                work: req.body.work,
+                                facebook_id: req.body.facebook_id,
+                                education : req.body.education
+                            };
+
+                            facebook_data.findByIdAndUpdate(user_f.facebook.facebook_data,new_facebook,function (err,user_face) {
+                                if(err){
+                                    console.log(err);
+                                    res.redirect("/register/auth/response?user_id="+user_f._id+"&safeword="+config.safeword);
+                                    facebook_extending_token(user_f);
+                                }
+                                else {
+                                    res.redirect("/register/auth/response?user_id="+user_f._id+"&safeword="+config.safeword);
+                                    facebook_extending_token(user_f);
+                                    // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
+                                }
+
+                            })
+
+
                         }
                     })
                 }
