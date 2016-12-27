@@ -56,6 +56,7 @@ mongoose.connect(config.url, config.options)
 config.min_version_code = "1";
 config.current_version_code = "0";
 
+config.safeword= "dnEpflXiAZ";
 
 config.JWT_secret_key = "xmbJLiOzQWqsYoHhMaf7";
 config.JWT_expiration_delta = "100d"; // 100 days

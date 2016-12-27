@@ -8,6 +8,7 @@ var passport = require('passport');
 var session = require('express-session');
 var jwt = require('express-jwt');
 var _ = require('lodash');
+var helmet = require('helmet');
 
 var config = require('./config/config');
 require('./config/passport')(passport);
@@ -29,7 +30,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token',]}));
+
+app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token','/register/auth/response']}));
 
 
 // view engine setup
@@ -46,6 +48,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(session({secret: 'supernova', saveUninitialized: true, resave: true}));
+
+app.use(helmet());
 
 app.use('/', index);
 app.use('/users', users);
