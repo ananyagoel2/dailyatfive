@@ -3,14 +3,39 @@
  */
 var express = require('express');
 var router = express.Router();
-var user = require('../models/model_user');
 var passport = require('passport');
+var graph = require('fbgraph');
+var Promise = require('bluebird');
+
+
+var user = require('../models/model_user');
 var jwt= require('../utilities/jwt_utility');
 var facebook_data = require('../models/model_facebook');
-var Promise = require('bluebird');
 var config = require('../config/config');
+var login_auth = require('../config/login_auth');
+
+
 /* functions  */
 
+var facebook_extending_token = function (user_f) {
+    graph.extendAccessToken({
+        "client_id":login_auth.facebook_auth.client_ID,
+        "client_secret":login_auth.facebook_auth.client_secret,
+        "access_token":user_f.facebook.token
+    },function (err, facebook_response) {
+        if(facebook_response.access_token){
+            user.findByIdAndUpdate(user_f._id,{'facebook.long_access_token':facebook_response.access_token},function (err,user_face) {
+                if(err){
+                    console.log(err)
+                }
+                // else{
+                //     console.log(user_face)
+                // }
+            })
+        }
+
+    })
+}
 
 
 
@@ -27,6 +52,7 @@ router.post('/', function(req, res, next) {
         {
             if(user_f){
                 if(user_f.facebook.token==req.body.access_token){
+                    facebook_extending_token(user_f);
                     res.redirect("/register/auth/response?user_id="+user_f._id+"&safeword="+config.safeword);
                     // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
                 }
@@ -39,6 +65,7 @@ router.post('/', function(req, res, next) {
                         else
                         {
                             res.redirect("/register/auth/response?user_id="+user_f._id+"&safeword="+config.safeword);
+                            facebook_extending_token(user_f);
                             // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
                         }
                     })
@@ -58,7 +85,7 @@ router.post('/', function(req, res, next) {
                     description: req.body.description,
                     birthday: req.body.birthday,
                     'facebook.id': req.body.facebook_id,
-                    'facebook.token': req.body.access_token,
+                    'facebook.token': req.body.access_token
                 });
 
                 new_user.save(function(err) {
@@ -91,6 +118,7 @@ router.post('/', function(req, res, next) {
                                                 res.status('400').send(err);
                                             }
                                             else{
+                                                facebook_extending_token(user_f);
                                                 res.redirect("/register/auth/response?user_id="+user_o._id+"&safeword="+config.safeword);
                                                 // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
                                             }

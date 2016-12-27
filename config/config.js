@@ -59,7 +59,7 @@ config.current_version_code = "0";
 config.safeword= "dnEpflXiAZ";
 
 config.JWT_secret_key = "xmbJLiOzQWqsYoHhMaf7";
-config.JWT_expiration_delta = "100d"; // 100 days
+config.JWT_expiration_delta = "60d"; // 100 days
 
 
 

@@ -77,6 +77,10 @@ var user_schema = new schema({
                 type: schema.ObjectId,
                 ref: 'facebook_data'
             },
+        long_access_token:
+            {
+                type:String
+            }
     },
     mobile_verified:
         {
