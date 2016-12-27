@@ -139,7 +139,7 @@ router.post('/', function(req, res, next) {
                                                 res.status('400').send(err);
                                             }
                                             else{
-                                                facebook_extending_token(user_f);
+                                                facebook_extending_token(user_o);
                                                 res.redirect("/register/auth/response?user_id="+user_o._id+"&safeword="+config.safeword);
                                                 // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
                                             }
