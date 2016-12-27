@@ -92,8 +92,7 @@ var user_schema = new schema({
         {
             type:String,
             trim:true,
-            unique:true,
-            required:true
+            unique:true
         },
     is_new_user:
         {
@@ -135,8 +134,8 @@ user_schema.pre('save', function(next) {
 
 
 
-user_schema.index({ email: 1, type: -1 }); // schema level
-user_schema.index({mobile_number:1,type:-1});
+// user_schema.index({ email: 1, type: -1 }); // schema level
+user_schema.index({mobile_number:1,facebook_id:1,email:1},{unique:true});
 
 
 
