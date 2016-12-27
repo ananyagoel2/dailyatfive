@@ -36,9 +36,8 @@ var user_schema = new schema({
     first_name :
         {
         type: String,
-        trim:true,
-        required:true
-    },
+        trim:true
+        },
     last_name :
         {
         type: String,

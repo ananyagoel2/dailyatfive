@@ -54,7 +54,7 @@ mongoose.connect(config.url, config.options)
 })
 
 config.min_version_code = "1";
-config.current_version_code = "0";
+config.current_version_code = "1";
 
 config.safeword= "dnEpflXiAZ";
 
