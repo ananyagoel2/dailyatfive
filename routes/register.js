@@ -24,7 +24,7 @@ var facebook_extending_token = function (user_f) {
         "access_token":user_f.facebook.token
     },function (err, facebook_response) {
         if(facebook_response.access_token){
-            user.findByIdAndUpdate(user_f._id,{'facebook.long_access_token':facebook_response.access_token},function (err,user_face) {
+            user.findByIdAndUpdate(user_f._id,{'facebook.long_access_token':facebook_response.access_token},{upsert:true},function (err,user_face) {
                 if(err){
                     console.log(err)
                 }
