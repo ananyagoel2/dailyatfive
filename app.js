@@ -14,7 +14,6 @@ var config = require('./config/config');
 require('./config/passport')(passport);
 
 
-
 var index = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register');
