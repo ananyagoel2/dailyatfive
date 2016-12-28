@@ -22,6 +22,7 @@ var register = require('./routes/register');
 var app = express();
 
 
+
 //JWT setup
 app.use(function (req, res, next) {
     var auth_token = req.headers.authorization;
