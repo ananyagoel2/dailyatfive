@@ -61,6 +61,8 @@ config.safeword= "dnEpflXiAZ";
 config.JWT_secret_key = "xmbJLiOzQWqsYoHhMaf7";
 config.JWT_expiration_delta = "60d"; // 100 days
 
-
+config.msg91_auth_key = "106552ASqBUHY556efd867";
+config.msg91_sender_id = "hmchef";
+config.msg91_route_no = 4;
 
 module.exports = config;

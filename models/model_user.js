@@ -6,6 +6,10 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 var facebook_data =require('./model_facebook');
+var validators = require('mongoose-validators');
+
+
+
 var user_schema = new schema({
 
     created_at:
@@ -27,7 +31,8 @@ var user_schema = new schema({
         trim:true,
         unique:true,
         index:true,
-        sparse:true
+        sparse:true,
+        validate:validators.isNumeric()
         },
     extension :
         {
@@ -47,7 +52,7 @@ var user_schema = new schema({
     },
     fcm_token :
         {
-        type:String,
+        type:String
     },
     facebook_id:
         {
@@ -98,7 +103,8 @@ var user_schema = new schema({
             type:String,
             trim:true,
             unique:true,
-            sparse:true
+            sparse:true,
+            validate:validators.isEmail()
         },
     is_new_user:
         {
@@ -108,7 +114,7 @@ var user_schema = new schema({
     description :
         {
             type:String,
-            trim:true,
+            trim:true
     },
     birthday:
         {
@@ -117,7 +123,16 @@ var user_schema = new schema({
     user_image_url:
         {
           type:String
-        }
+        },
+    profile_created:
+    {
+        type:Boolean,
+        default:false
+    },
+    auth_number:{
+        type:String,
+        validate:validators.isNumeric()
+    }
 
 });
 
