@@ -26,7 +26,9 @@ var user_schema = new schema({
         type:String,
         trim:true,
         unique:true,
-        index:true},
+        index:true,
+        sparse:true
+        },
     extension :
         {
         type:String,
@@ -95,7 +97,8 @@ var user_schema = new schema({
         {
             type:String,
             trim:true,
-            unique:true
+            unique:true,
+            sparse:true
         },
     is_new_user:
         {
@@ -138,7 +141,7 @@ user_schema.pre('save', function(next) {
 
 
 // user_schema.index({ email: 1, type: -1 }); // schema level
-user_schema.index({mobile_number:1,facebook_id:1,email:1},{unique:true});
+user_schema.index({mobile_number:1,facebook_id:1,email:1},{unique:true,sparse:true});
 
 
 
