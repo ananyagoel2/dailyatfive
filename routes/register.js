@@ -64,7 +64,7 @@ router.route('/email/:email')
 })
 
     .post(function (req, res) {
-        user_m.findOne({email:req.body.email},function (err, user) {
+        user_m.findOne({email:req.params.email},function (err, user) {
             if(err){
                 res.status('400').send(err);
             }
@@ -75,7 +75,7 @@ router.route('/email/:email')
                 }
                 else{
                     var new_user = user_m({
-                        email:req.body.email,
+                        email:req.params.email,
                         password:req.body.password
                     });
                         new_user.save(function(err) {
@@ -92,7 +92,7 @@ router.route('/email/:email')
                     }
             }
         })
-    })
+    });
 
 
 router.route('/facebook')
@@ -147,8 +147,52 @@ router.route('/facebook')
 
                 user_m.findOne({email:req.body.email},function (err,user_e) {
                     if(user_e){
+                        user_e.facebook_id=req.body.facebook_id;
+                        user_e.facebook.id=req.body.facebook_id;
+                        user_e.facebook.token = req.body.access_token;
+                        user_e.save(function (err) {
+                            if(err){
+                                res.status(400).send({error:err})
+                            }
+                            else
+                                {
+                                var new_facebook = facebook_data({
+                                    user:user_e._id,
+                                    user_friends: req.body.user_friends,
+                                    facebook_id: req.body.facebook_id
+                                });
+                                new_facebook.save(function (err) {
+                                    if (err){
+                                        res.status('400').send(err)
+                                    }
+                                    else
+                                    {
+                                        user_m.findById(user_e._id,function (err, user_o) {
+                                            if(err){
+                                                res.status('400').send(err)
+                                            }
+                                            else{
+                                                user_o.facebook.facebook_data =new_facebook._id;
+                                                user_o.save(function (err) {
+                                                    if(err){
+                                                        res.status('400').send(err);
+                                                    }
+                                                    else{
+                                                        facebook_extending_token(user_o);
+                                                        res.redirect("/register/auth/response?user_id="+user_o._id+"&safeword="+config.safeword);
+                                                        // res.redirect("/register/auth/facebook/token?access_token="+req.body.access_token);
+                                                    }
+                                                })
+                                            }
+                                        })
 
-                        res.redirect("/register/auth/response?user_id="+user_e._id+"&safeword="+config.safeword);
+                                    }
+                                })
+                            }
+
+                                // res.redirect("/register/auth/response?user_id="+user_e._id+"&safeword="+config.safeword);
+
+                        })
                     }
                     else
                     {
@@ -172,14 +216,12 @@ router.route('/facebook')
                             if (err){
                                 res.status('400').send(err);
                             }
-                            else {
+                            else
+                                {
                                 var new_facebook = facebook_data({
                                     user:new_user._id,
                                     user_friends: req.body.user_friends,
-                                    user_likes: req.body.user_likes,
-                                    work: req.body.work,
                                     facebook_id: req.body.facebook_id,
-                                    education : req.body.education
                                 });
                                 new_facebook.save(function (err) {
                                     if (err){

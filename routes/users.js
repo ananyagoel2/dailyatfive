@@ -31,7 +31,7 @@ router.route('/:user_id')
 })
 
     .put(function (req, res) {
-        var accepted_input_keys = ['email', 'mobile_number', 'first_name', 'last_name', 'extension','facebook.token','profile_created'];
+        var accepted_input_keys = ['email', 'mobile_number', 'first_name', 'last_name', 'extension','facebook.token','profile_created','facebook.id'];
 
         // for (var key in req.body ) {
         //     if (req.body.hasOwnProperty(key) && _.includes(accepted_input_keys, key)) {
@@ -49,7 +49,8 @@ router.route('/:user_id')
             birthday:req.body.birthday,
             is_new_user:req.body.is_new_user,
             admin:req.body.admin,
-            profile_created:req.body.profile_created
+            profile_created:req.body.profile_created,
+            'facebook.id':req.body.facebook_id
         }
         var result_updated_object = _.omitBy(user_update_object, _.isNil);
         user_m.findByIdAndUpdate(req.params.user_id,result_updated_object,function (err,user_res) {
@@ -145,7 +146,7 @@ router.route('/:user_id/verify_OTP/:OTP')
                         }
                         else
                         {
-                            user_m.findById(user_res._id,function (err, user) {
+                            user_m.findById(user._id,function (err, user) {
                                 if (err){
                                     res.status(400).send({error:err})
                                 }

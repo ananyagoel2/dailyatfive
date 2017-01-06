@@ -34,7 +34,7 @@ router.route('/')
                             }
                             else
                             {
-                                res.status(400).send({message:"Wrong credentials"})
+                                res.status(401).send({message:"Wrong credentials"})
                             }
                         })
                     }
