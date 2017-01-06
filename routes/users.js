@@ -128,7 +128,6 @@ router.route('/:user_id/mobile_verification')
 
 router.route('/:user_id/verify_OTP/:OTP')
     .post(function (req, res) {
-        console.log("inside verify")
         user_m.findById(req.params.user_id,function (err, user) {
             if(err){
                 console.log(err)
@@ -139,7 +138,6 @@ router.route('/:user_id/verify_OTP/:OTP')
                 if(req.params.OTP==user.auth_number)
                 {
                     user.mobile_verified=true;
-                    console.log("here")
                     user.save(function (err) {
                         if(err){
                             res.status(400).send(err);
@@ -159,8 +157,7 @@ router.route('/:user_id/verify_OTP/:OTP')
                     })
                 }
                 else{
-                    console.log("inside auth failure")
-                    res.status(1100).send("OTP mismatch. Retry")
+                    res.status(401).send({message:"OTP mismatch. Retry"})
                 }
             }
             else
