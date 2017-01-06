@@ -19,9 +19,13 @@ router.route('/:user_id')
         if (err){
             res.status(400).send({error:err})
         }
-        else
+        else if(user)
         {
             res.status(200).send(user)
+        }
+        else
+        {
+            res.status(404).send({message:"User not found!"})
         }
     })
 })
@@ -53,11 +57,11 @@ router.route('/:user_id')
                 console.log(err)
                 res.status(400).send(err)
             }
-            else
+            else if(user_res)
             {
                 // console.log(user_res)
                 //USED 303 to redirect to get of the route! it works fine af
-                // res.redirect(303,"/users/"+user._id);
+                // res.redirect(303,"/users/"+user_m._id);
                 user_m.findById(user_res._id,function (err, user) {
                     if (err){
                         res.status(400).send({error:err})
@@ -69,6 +73,11 @@ router.route('/:user_id')
                 })
                 // res.send(user_res)
             }
+            else
+            {
+                res.status(404).send({message:"User not found!"})
+            }
+
     })
     });
 
@@ -83,7 +92,7 @@ router.route('/:user_id/mobile_verification')
                     console.log(err)
                     res.status(400).send(err)
                 }
-                else
+                else if(user_res)
                 {
                     var message = "Hi "+user_res.first_name+"!\nYour one time password is "+OTP+".";
                     msg91.send(mobile_number,message,function (err,response) {
@@ -105,6 +114,9 @@ router.route('/:user_id/mobile_verification')
                     })
                     // res.send(user_res)
                 }
+                else{
+                    res.status(404).send({message:"User not found!"})
+                }
             })
         }
         else{
@@ -113,7 +125,7 @@ router.route('/:user_id/mobile_verification')
 
     });
 
-router.route(':/user_id/verify_OTP/:OTP')
+router.route('/:user_id/verify_OTP/:OTP')
     .post(function (req, res) {
         console.log("inside verify")
         user_m.findById(req.params.user_id,function (err, user) {
@@ -121,7 +133,7 @@ router.route(':/user_id/verify_OTP/:OTP')
                 console.log(err)
                 res.staus(400).send(err)
             }
-            else
+            else if (user)
             {
                 if(req.params.OTP==user.auth_number)
                 {
@@ -149,6 +161,10 @@ router.route(':/user_id/verify_OTP/:OTP')
                     console.log("inside auth failure")
                     res.status(1100).send("OTP mismatch. Retry")
                 }
+            }
+            else
+            {
+                res.status(404).send({message:"User not found!"})
             }
         })
 

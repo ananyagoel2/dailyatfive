@@ -24,22 +24,10 @@ var facebook_data_schema = new schema({
         {
             type:schema.Types.Mixed
         },
-    user_likes:
-        {
-            type: schema.Types.Mixed
-        },
-    work:
-        {
-            type: schema.Types.Mixed
-        },
     facebook_id:
         {
             type:String
-        },
-    education:{
-        type:schema.Types.Mixed
-    }
-
+        }
 });
 
 // on every save, add the date

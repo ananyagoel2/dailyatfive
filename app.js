@@ -17,7 +17,7 @@ require('./config/passport')(passport);
 var index = require('./routes/index');
 var users = require('./routes/users');
 var register = require('./routes/register');
-
+var login = require('./routes/login');
 
 var app = express();
 
@@ -31,7 +31,7 @@ app.use(function (req, res, next) {
 });
 
 
-app.use(jwt({ secret: config.JWT_secret_key}).unless({path: ['/', '/register','/register/auth/facebook/token','/register/auth/response']}));
+app.use(jwt({ secret: config.JWT_secret_key}).unless({path: [/^\/register\/email\/.*/,'/register/facebook','/register/auth/facebook/token','/register/auth/response','/login']}));
 
 
 // view engine setup
@@ -54,7 +54,7 @@ app.use(helmet());
 app.use('/', index);
 app.use('/users', users);
 app.use('/register',register);
-
+app.use('/login',login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

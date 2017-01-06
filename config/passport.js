@@ -72,11 +72,11 @@ module.exports = function(passport) {
     //     },
     //     function(token, tokenSecret, profile, done) {
     //         process.nextTick(function() {
-    //             User_m.findOne({ 'twitter.id': profile.id }, function(err, user) {
+    //             User_m.findOne({ 'twitter.id': profile.id }, function(err, user_m) {
     //                 if (err)
     //                     return done(err);
-    //                 if (user) {
-    //                     return done(null, user);
+    //                 if (user_m) {
+    //                     return done(null, user_m);
     //                 } else {
     //                     var newUser = new User_m();
     //                     console.log(profile)
@@ -101,11 +101,11 @@ module.exports = function(passport) {
     //     },
     //     function(token, refreshToken, profile, done) {
     //         process.nextTick(function() {
-    //             User_m.findOne({ 'google.id': profile.id }, function(err, user) {
+    //             User_m.findOne({ 'google.id': profile.id }, function(err, user_m) {
     //                 if (err)
     //                     return done(err);
-    //                 if (user) {
-    //                     return done(null, user);
+    //                 if (user_m) {
+    //                     return done(null, user_m);
     //                 } else {
     //                     var newUser = new User_m();
     //                     console.log(profile)
