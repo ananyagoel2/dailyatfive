@@ -50,7 +50,8 @@ router.route('/:user_id')
             is_new_user:req.body.is_new_user,
             admin:req.body.admin,
             profile_created:req.body.profile_created,
-            'facebook.id':req.body.facebook_id
+            'facebook.id':req.body.facebook_id,
+            fcm_token:req.bosy.fcm_token
         }
         var result_updated_object = _.omitBy(user_update_object, _.isNil);
         user_m.findByIdAndUpdate(req.params.user_id,result_updated_object,function (err,user_res) {
